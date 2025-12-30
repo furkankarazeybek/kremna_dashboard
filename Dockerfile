@@ -12,7 +12,7 @@ RUN npm install
 COPY dashboard_frontend/ .
 
 
-ENV VITE_API_BASE_URL=https://furkankarazeybek-kremna-dashboard.hf.space/api/v1
+ENV VITE_API_BASE_URL=https://furkankarazeybek-kremna-dashboard.hf.space
 # Widget'ın kendi sunulduğu adres (Embed scripti için)
 ENV VITE_WIDGET_URL=https://furkankarazeybek-kremna-dashboard.hf.space/widget
 RUN npm run build -- --base=/widget/
