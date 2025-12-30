@@ -4,7 +4,7 @@ import { io } from "socket.io-client";
 import { MessageCircle, X, Send, Bot } from "lucide-react";
 import "./index.css";
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:3000";
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "https://furkankarazeybek-kremna-dashboard.hf.space";
 
 // Varsayılan ID (Sadece sen geliştirme yaparken localhost'ta direkt açarsan çalışsın diye)
 const DEV_DEFAULT_ID = "db0d9a7f-32eb-4bf5-ba58-a5cf08d48d58";
