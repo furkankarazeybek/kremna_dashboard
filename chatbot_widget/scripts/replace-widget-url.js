@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Widget URL'ini environment variable'dan al
-const WIDGET_URL = process.env.VITE_WIDGET_URL || 'http://localhost:5173';
+const WIDGET_URL = process.env.VITE_WIDGET_URL || 'huggingface.co/spaces/furkankarazeybek/kremna_dashboard/widget';
 
 // dist/embed.js dosyasını oku
 const embedPath = join(__dirname, '..', 'dist', 'embed.js');
