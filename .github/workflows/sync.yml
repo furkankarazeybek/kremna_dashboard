@@ -16,4 +16,4 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         # DİKKAT: Aşağıdaki linki kendi Space adresinle güncelle!
-        run: git push https://furkankarazeybek:$HF_TOKEN@huggingface.co/spaces/furkankarazeybek/kremna_dashboard main
+        run: git push --force https://furkankarazeybek:$HF_TOKEN@huggingface.co/spaces/furkankarazeybek/kremna_dashboard main
