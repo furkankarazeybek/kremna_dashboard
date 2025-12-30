@@ -1,6 +1,5 @@
-// public/embed.js
 (function () {
-  // Kullanıcının sayfaya koyduğu global değişkenden ID'yi al
+  // Kullanıcının sayfaya koyduğu ID'yi al
   const assistantId = window.KREMNA_ASSISTANT_ID;
 
   if (!assistantId) {
@@ -10,33 +9,38 @@
 
   const iframe = document.createElement("iframe");
 
-  // ÖNEMLİ NOKTA: ID'yi query string olarak ekliyoruz (?assistantId=...)
-  // Widget projesindeki App.jsx bunu okuyacak.
-  // __WIDGET_URL__ placeholder'ı build sırasında gerçek URL ile değiştirilecek
+  // Placeholder, Docker build sırasında gerçek URL ile değişecek
   iframe.src = `__WIDGET_URL__/?assistantId=${assistantId}`;
 
-  // Iframe Stilleri
+  // --- KRİTİK AYARLAR ---
+  // Başlangıçta SADECE butonun sığacağı kadar küçük bir alan açıyoruz.
+  // Ve 'pointerEvents' değerini 'all' yapıyoruz ki tıklanabilsin.
   iframe.style.position = "fixed";
-  iframe.style.bottom = "0";
-  iframe.style.right = "0";
-  iframe.style.width = "400px";
-  iframe.style.height = "600px";
+  iframe.style.bottom = "20px"; // Sayfanın en altından biraz yukarı
+  iframe.style.right = "20px";  // Sayfanın en sağından biraz içeri
+  iframe.style.width = "100px"; // Sadece buton genişliği
+  iframe.style.height = "100px"; // Sadece buton yüksekliği
   iframe.style.border = "none";
-  iframe.style.zIndex = "999999";
-  iframe.style.pointerEvents = "none"; // Kapalıyken siteyi engellemesin
-  iframe.style.background = "transparent";
+  iframe.style.zIndex = "9999999"; // En üstte dursun
+  iframe.style.pointerEvents = "all"; // ARTIK TIKLANABİLİR!
+  iframe.style.background = "transparent"; // Arkaplan şeffaf
+  iframe.style.transition = "all 0.3s ease"; // Büyürken animasyonlu olsun
 
-  // Widget açılıp kapanınca boyut değiştir
+  // Widget açılıp/kapanma mesajlarını dinle (App.jsx'ten gelen)
   window.addEventListener("message", (event) => {
     if (event.data.type === "KREMNA_WIDGET_RESIZE") {
       if (event.data.isOpen) {
-        iframe.style.height = "600px";
+        // Sohbet açıldığında büyüt
         iframe.style.width = "400px";
-        iframe.style.pointerEvents = "all";
+        iframe.style.height = "600px";
+        iframe.style.bottom = "0"; // Tam oturması için
+        iframe.style.right = "0";
       } else {
-        iframe.style.height = "100px";
+        // Sohbet kapandığında tekrar küçült (Buton haline dön)
         iframe.style.width = "100px";
-        iframe.style.pointerEvents = "all";
+        iframe.style.height = "100px";
+        iframe.style.bottom = "20px";
+        iframe.style.right = "20px";
       }
     }
   });
