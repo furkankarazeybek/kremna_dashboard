@@ -13,10 +13,11 @@ COPY dashboard_frontend/ .
 
 # React projesini derle (API adresi olarak kendi sunucusunu gösteriyoruz)
 # 'npm run build' çıktıyı 'build' klasörüne atar (Create-React-App varsayılanı)
-ENV REACT_APP_API_BASE_URL=https://furkankarazeybek-kremna-dashboard.hf.space
 ENV VITE_SOCKET_URL=https://furkankarazeybek-kremna-dashboard.hf.space
 ENV VITE_WIDGET_URL=https://furkankarazeybek-kremna-company.hf.space/widget
+RUN npm run build -- --base=/widget/
 
+ENV REACT_APP_API_BASE_URL=https://furkankarazeybek-kremna-dashboard.hf.space
 ENV REACT_APP_WIDGET_BASE_URL=https://furkankarazeybek-kremna-company.hf.space/widget
 RUN npm run build
 
