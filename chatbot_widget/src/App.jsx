@@ -2,9 +2,9 @@
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { MessageCircle, X, Send, Bot } from "lucide-react";
-import "./index.css"; 
+import "./index.css";
 
-const SOCKET_URL = "http://localhost:3000"; 
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:3000";
 
 // Varsayılan ID (Sadece sen geliştirme yaparken localhost'ta direkt açarsan çalışsın diye)
 const DEV_DEFAULT_ID = "db0d9a7f-32eb-4bf5-ba58-a5cf08d48d58";
@@ -43,7 +43,7 @@ export default function App() {
   useEffect(() => {
     if (isOpen && !socket) {
       console.log("Bağlanılıyor... Asistan ID:", ASSISTANT_ID); // Konsoldan ID'yi kontrol edebilirsin
-      
+
       const newSocket = io(SOCKET_URL);
 
       newSocket.on("connect", () => {
@@ -91,7 +91,7 @@ export default function App() {
               <p>Merhaba! Size nasıl yardımcı olabilirim?</p>
             </div>
           )}
-          
+
           {messages.map((msg, index) => {
             const isUser = msg.role === 'user';
             return (
@@ -112,7 +112,7 @@ export default function App() {
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               placeholder="Bir mesaj yazın..."
             />
-            <button 
+            <button
               className="send-btn"
               onClick={handleSend}
               disabled={!input.trim()}
@@ -125,7 +125,7 @@ export default function App() {
       </div>
 
       {/* BUTON */}
-      <button 
+      <button
         className={`toggle-btn ${isOpen ? "open" : ""}`}
         onClick={() => setIsOpen(!isOpen)}
       >

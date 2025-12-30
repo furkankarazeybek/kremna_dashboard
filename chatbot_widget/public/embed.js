@@ -2,18 +2,19 @@
 (function () {
   // Kullanıcının sayfaya koyduğu global değişkenden ID'yi al
   const assistantId = window.KREMNA_ASSISTANT_ID;
-  
+
   if (!assistantId) {
     console.error("Kremna Widget: Asistan ID bulunamadı!");
     return;
   }
 
   const iframe = document.createElement("iframe");
-  
+
   // ÖNEMLİ NOKTA: ID'yi query string olarak ekliyoruz (?assistantId=...)
   // Widget projesindeki App.jsx bunu okuyacak.
-  iframe.src = `http://localhost:5173/?assistantId=${assistantId}`;
-  
+  // __WIDGET_URL__ placeholder'ı build sırasında gerçek URL ile değiştirilecek
+  iframe.src = `__WIDGET_URL__/?assistantId=${assistantId}`;
+
   // Iframe Stilleri
   iframe.style.position = "fixed";
   iframe.style.bottom = "0";
