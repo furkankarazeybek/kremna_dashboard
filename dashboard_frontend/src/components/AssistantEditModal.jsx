@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { X } from "lucide-react";
+import { API_BASE_URL } from "../config/api";
 
 export default function AssistantEditModal({ open, onClose, assistant, onUpdated }) {
   const [name, setName] = useState("");
@@ -24,7 +25,7 @@ export default function AssistantEditModal({ open, onClose, assistant, onUpdated
     try {
       // Güncelleme isteği (PATCH)
       const res = await axios.patch(
-        `http://localhost:3000/api/v1/assistants/${assistant.id}`,
+        `${API_BASE_URL}/api/v1/assistants/${assistant.id}`,
         { name, instructions }
       );
 

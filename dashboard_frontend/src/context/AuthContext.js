@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../config/api";
 
 const AuthContext = createContext();
 
@@ -20,9 +21,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const res = await axios.post("http://localhost:3000/api/v1/auth/login", { email, password });
+    const res = await axios.post(`${API_BASE_URL}/api/v1/auth/login`, { email, password });
     const { access_token, user } = res.data;
-    
+
     localStorage.setItem("token", access_token);
     localStorage.setItem("user", JSON.stringify(user));
     axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
@@ -31,7 +32,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (username, email, password) => {
-    await axios.post("http://localhost:3000/api/v1/auth/register", { username, email, password });
+    await axios.post(`${API_BASE_URL}/api/v1/auth/register`, { username, email, password });
     return true;
   };
 

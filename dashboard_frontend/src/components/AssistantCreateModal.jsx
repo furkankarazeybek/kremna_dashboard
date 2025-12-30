@@ -1,13 +1,14 @@
 // src/components/AssistantCreateModal.jsx
 import { useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../config/api";
 // Eğer Toast bileşenin yoksa veya hata veriyorsa aşağıdaki importu kaldırıp alert kullanabilirsin.
 // import { useToast } from "./Toast"; 
 
 export default function AssistantCreateModal({ open, onClose, onCreated }) {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
-  
+
   // Basit bir bildirim fonksiyonu (Toast bileşeni yoksa hata vermemesi için)
   const showToast = (message, type) => {
     // Eğer projende Toast yapısı varsa onu kullan, yoksa alert göster
@@ -30,7 +31,7 @@ export default function AssistantCreateModal({ open, onClose, onCreated }) {
       };
 
       const res = await axios.post(
-        "http://localhost:3000/api/v1/assistants",
+        `${API_BASE_URL}/api/v1/assistants`,
         payload
       );
 

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { X, MessageSquare, User, Bot, Calendar, Search } from "lucide-react"; // Search ikonu eklendi
+import { API_BASE_URL } from "../config/api";
 
 export default function ChatHistoryModal({ open, onClose, assistant }) {
   const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+
   // YENİ: Arama Terimi State'i
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -23,11 +24,11 @@ export default function ChatHistoryModal({ open, onClose, assistant }) {
   const fetchChats = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:3000/api/v1/chats/assistant/${assistant.id}`);
-      
+      const res = await axios.get(`${API_BASE_URL}/api/v1/chats/assistant/${assistant.id}`);
+
       // Boş sohbetleri filtrele
       const nonEmptyChats = res.data.filter(chat => chat.messages && chat.messages.length > 0);
-      
+
       setChats(nonEmptyChats);
 
       if (nonEmptyChats.length > 0) {
@@ -48,12 +49,12 @@ export default function ChatHistoryModal({ open, onClose, assistant }) {
     if (!searchTerm.trim()) return true; // Arama yoksa hepsini göster
 
     const term = searchTerm.toLowerCase();
-    
+
     // Arama 1: Başlıkta var mı? (Ziyaretçi ID vs)
     const titleMatch = (chat.title || "Ziyaretçi").toLowerCase().includes(term);
 
     // Arama 2: Mesajların İÇİNDE var mı?
-    const messageMatch = chat.messages?.some((msg) => 
+    const messageMatch = chat.messages?.some((msg) =>
       msg.content.toLowerCase().includes(term)
     );
 
@@ -62,17 +63,17 @@ export default function ChatHistoryModal({ open, onClose, assistant }) {
 
   // --- 2. MESAJ SIRALAMASI ---
   // Seçili sohbetin mesajlarını tarihe göre (Eskiden -> Yeniye) sırala
-  const sortedMessages = selectedChat 
-    ? [...selectedChat.messages].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)) 
+  const sortedMessages = selectedChat
+    ? [...selectedChat.messages].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
     : [];
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 animate-fade-in">
       <div className="bg-white w-full max-w-5xl h-[80vh] rounded-2xl shadow-2xl flex overflow-hidden border border-gray-200">
-        
+
         {/* SOL TARAF: LİSTE VE ARAMA */}
         <div className="w-1/3 bg-gray-50 border-r border-gray-200 flex flex-col">
-          
+
           {/* Header ve Arama Alanı */}
           <div className="p-4 border-b border-gray-200 bg-white space-y-3">
             <div>
@@ -86,9 +87,9 @@ export default function ChatHistoryModal({ open, onClose, assistant }) {
             {/* ARAMA INPUTU */}
             <div className="relative">
               <Search className="absolute left-3 top-2.5 text-gray-400" size={16} />
-              <input 
-                type="text" 
-                placeholder="Kelime veya mesaj ara..." 
+              <input
+                type="text"
+                placeholder="Kelime veya mesaj ara..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full bg-gray-100 border-none rounded-lg py-2 pl-9 pr-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
@@ -120,11 +121,10 @@ export default function ChatHistoryModal({ open, onClose, assistant }) {
                 <div
                   key={chat.id}
                   onClick={() => setSelectedChat(chat)}
-                  className={`p-3 rounded-lg cursor-pointer transition-all border ${
-                    selectedChat?.id === chat.id
+                  className={`p-3 rounded-lg cursor-pointer transition-all border ${selectedChat?.id === chat.id
                       ? "bg-white border-blue-300 shadow-sm ring-1 ring-blue-100"
                       : "bg-transparent border-transparent hover:bg-gray-100 hover:border-gray-200"
-                  }`}
+                    }`}
                 >
                   <div className="flex justify-between items-start mb-1">
                     <span className="font-semibold text-gray-700 text-sm">
@@ -169,24 +169,22 @@ export default function ChatHistoryModal({ open, onClose, assistant }) {
                 const isUser = msg.role === 'user';
                 // Eğer aranan kelime bu mesajda geçiyorsa vurgula (Opsiyonel ama şık olur)
                 const highlight = searchTerm && msg.content.toLowerCase().includes(searchTerm.toLowerCase());
-                
+
                 return (
                   <div key={idx} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
                     <div className={`flex max-w-[80%] gap-3 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        isUser ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'
-                      }`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${isUser ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'
+                        }`}>
                         {isUser ? <User size={16} /> : <Bot size={16} />}
                       </div>
-                      
-                      <div className={`p-3 rounded-2xl text-sm shadow-sm transition-all ${
-                        isUser 
-                          ? 'bg-blue-600 text-white rounded-tr-none' 
+
+                      <div className={`p-3 rounded-2xl text-sm shadow-sm transition-all ${isUser
+                          ? 'bg-blue-600 text-white rounded-tr-none'
                           : 'bg-white border border-gray-200 text-gray-700 rounded-tl-none'
-                      } ${highlight ? 'ring-2 ring-yellow-400 ring-offset-1' : ''}`}> {/* Aranan mesajsa sarı halka ekle */}
+                        } ${highlight ? 'ring-2 ring-yellow-400 ring-offset-1' : ''}`}> {/* Aranan mesajsa sarı halka ekle */}
                         {msg.content}
                         <div className={`text-[10px] mt-1 text-right ${isUser ? 'text-blue-200' : 'text-gray-400'}`}>
-                          {new Date(msg.createdAt).toLocaleTimeString("tr-TR", {hour: '2-digit', minute:'2-digit'})}
+                          {new Date(msg.createdAt).toLocaleTimeString("tr-TR", { hour: '2-digit', minute: '2-digit' })}
                         </div>
                       </div>
                     </div>

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Bot, MessageSquare, Activity } from "lucide-react"; // İkonları ekleyelim (isteğe bağlı)
+import { API_BASE_URL } from "../config/api";
 
 function StatCard({ title, value, icon, onClick, colorClass }) {
   return (
@@ -29,7 +30,7 @@ export default function Home() {
     totalMessages: 0,
     activeUsers: 0
   });
-  
+
   const [source, setSource] = useState("yükleniyor...");
 
   useEffect(() => {
@@ -37,8 +38,8 @@ export default function Home() {
       try {
         // Backend'deki Analytics servisine tek istek atıyoruz
         // Bu endpoint bize { totalAssistants, totalMessages, activeUsers } dönüyor
-        const res = await axios.get("http://localhost:3000/api/v1/analytics");
-        
+        const res = await axios.get(`${API_BASE_URL}/api/v1/analytics`);
+
         setStats(res.data);
         setSource("backend");
       } catch (e) {
@@ -60,11 +61,10 @@ export default function Home() {
           </p>
         </div>
         <span
-          className={`px-3 py-1 rounded-full text-xs font-semibold ${
-            source === "backend"
+          className={`px-3 py-1 rounded-full text-xs font-semibold ${source === "backend"
               ? "bg-green-100 text-green-700"
               : "bg-red-100 text-red-700"
-          }`}
+            }`}
         >
           Durum: {source === "backend" ? "Canlı Veri (Backend)" : "Bağlantı Yok"}
         </span>
@@ -72,26 +72,26 @@ export default function Home() {
 
       {/* İstatistik Kartları */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <StatCard 
-          title="Toplam Asistan" 
-          value={stats.totalAssistants} 
+        <StatCard
+          title="Toplam Asistan"
+          value={stats.totalAssistants}
           icon={<Bot size={24} />}
           colorClass="bg-blue-100 text-blue-600"
-          onClick={() => navigate("/assistants")} 
+          onClick={() => navigate("/assistants")}
         />
-        <StatCard 
-          title="Toplam Mesaj" 
-          value={stats.totalMessages} 
+        <StatCard
+          title="Toplam Mesaj"
+          value={stats.totalMessages}
           icon={<MessageSquare size={24} />}
           colorClass="bg-green-100 text-green-600"
-          onClick={() => navigate("/analytics")} 
+          onClick={() => navigate("/analytics")}
         />
-        <StatCard 
-          title="Toplam Sohbet" 
-          value={stats.activeUsers} 
+        <StatCard
+          title="Toplam Sohbet"
+          value={stats.activeUsers}
           icon={<Activity size={24} />}
           colorClass="bg-purple-100 text-purple-600"
-          onClick={() => navigate("/analytics")} 
+          onClick={() => navigate("/analytics")}
         />
       </div>
 
