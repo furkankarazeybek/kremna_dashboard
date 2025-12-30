@@ -18,7 +18,7 @@ ENV VITE_WIDGET_URL=https://furkankarazeybek-kremna-dashboard.hf.space/widget
 RUN npm run build -- --base=/widget/
 
 ENV REACT_APP_API_BASE_URL=https://furkankarazeybek-kremna-dashboard.hf.space
-ENV REACT_APP_WIDGET_BASE_URL=https://furkankarazeybek-kremna-company.hf.space/widget
+ENV REACT_APP_WIDGET_BASE_URL=https://furkankarazeybek-kremna-dashboard.hf.space/widget
 RUN npm run build
 
 # ------------------------------
