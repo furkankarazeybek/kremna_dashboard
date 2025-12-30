@@ -1,0 +1,19 @@
+name: Sync to Hugging Face Hub
+on:
+  push:
+    branches: [main]  # Ana branch ismin "master" ise burayı değiştir
+  workflow_dispatch:
+
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Push to hub
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        # AŞAĞIDAKİ SATIRDAKİ ADRESİ KENDİ SPACE ADRESİNLE DEĞİŞTİR
+        run: git push https://furkankarazeybek:$HF_TOKEN@huggingface.co/spaces/furkankarazeybek/kremna_dashboard main

@@ -7,17 +7,20 @@ dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
-  // CORS'u tam açıyoruz ki Widget ve Dashboard rahatça bağlansın
   app.enableCors({
     origin: '*', 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
 
-  // API prefix eklemek iyi bir pratiktir (Dashboard kodlarında /api/v1 kullanılıyorsa buraya ekle)
   app.setGlobalPrefix('api/v1'); 
 
+  // Hugging Face portu (7860) veya yerel 3000
   const port = process.env.PORT || 3000;
-  await app.listen(port);
-  console.log(`Backend Çalışıyor: http://localhost:${port}`);
+  
+  // ÖNEMLİ DEĞİŞİKLİK: '0.0.0.0' ekledik. 
+  // Bu olmadan Hugging Face dışarıdan gelen istekleri göremez.
+  await app.listen(port, '0.0.0.0');
+  
+  console.log(`Backend Çalışıyor: http://0.0.0.0:${port}`);
 }
 bootstrap();
